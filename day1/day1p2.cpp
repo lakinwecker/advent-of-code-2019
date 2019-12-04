@@ -1,11 +1,11 @@
 #include <iostream>
-#include <sstream>
-#include <vector>
-#include <iterator>
-#include <algorithm>
-#include <numeric>
+#include <range/v3/view.hpp>
+#include <range/v3/algorithm.hpp>
+#include <range/v3/functional.hpp>
+#include <range/v3/numeric/accumulate.hpp>
 
 using namespace std;
+using namespace ranges;
 
 int fuel(int mass) {
     int f = mass / 3 - 2;
@@ -17,10 +17,22 @@ int fuel(int mass) {
 
 }
 
+struct to_int_fn {
+    template <class Rng>
+    int operator()(Rng && rng) const {
+        int res = 0;
+        RANGES_FOR (char ch, rng) {
+            if (ch < '0' || ch > '9')
+                throw std::invalid_argument("non-integral");
+            res = res * 10 + (ch - '0');
+        }
+        return res;
+    }
+};
+
 int main() {
-    vector<int> items;
-    copy(istream_iterator<int>(cin), istream_iterator<int>(), back_inserter(items));
-    transform(items.begin(), items.end(), items.begin(), fuel);
-    auto total = accumulate(items.begin(), items.end(), 0);
-    cout << total << endl;
+    auto fuel_costs = ranges::getlines(cin)
+                | views::transform(to_int_fn{})
+                | views::transform(fuel);
+    cout << ranges::accumulate(fuel_costs, 0) << endl;
 }
