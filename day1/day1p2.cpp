@@ -8,23 +8,19 @@
 using namespace std;
 
 int fuel(int mass) {
-    return mass / 3 - 2;
-}
-
-int extraFuel(int mass) {
-    int f = fuel(mass);
+    int f = mass / 3 - 2;
     if (f <= 0) {
         return 0;
     } else {
-        return f + extraFuel(f);
+        return f + fuel(f);
     }
+
 }
 
 int main() {
     vector<int> items;
     copy(istream_iterator<int>(cin), istream_iterator<int>(), back_inserter(items));
     transform(items.begin(), items.end(), items.begin(), fuel);
-    auto subTotal = accumulate(items.begin(), items.end(), 0);
-    auto total = subTotal + extraFuel(subTotal);
+    auto total = accumulate(items.begin(), items.end(), 0);
     cout << total << endl;
 }

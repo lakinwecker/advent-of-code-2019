@@ -1,18 +1,15 @@
 import System.Environment
 
 fuel :: Int -> Int
-fuel m = (m `div` 3) - 2
+fuel m = 
+    let f = (m `div` 3) - 2
+    in 
+        if f <= 0 then 0 else f + fuel(f)
 
 toInt :: String -> Int
 toInt s = read s :: Int
 
 (|>) x f = f x
-
-extraFuel :: Int -> Int
-extraFuel m =
-    let f = fuel(m)
-    in if f <= 0 then 0 else (fuel(m) + extraFuel(f))
-
 
 main = do
     args <- getArgs
@@ -24,7 +21,6 @@ main = do
         |> map toInt
         |> map fuel
         |> sum
-        |> (\m -> m + extraFuel m)
         |> show
         |> putStrLn
     -- putStrLn show $ sum $  map fuel $ map toInt $ lines content
