@@ -1,0 +1,9 @@
+*.class
+*.hi
+*.o
+project
+target
+.metals
+.bloop
+hs-*
+cpp-*
