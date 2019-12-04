@@ -7,13 +7,9 @@
 
 using namespace std;
 
-int calcFuel(int mass) {
-    return mass / 3 - 2;
-}
-
 int main() {
     vector<int> items;
     copy(istream_iterator<int>(cin), istream_iterator<int>(), back_inserter(items));
-    transform(items.begin(), items.end(), items.begin(), calcFuel);
+    transform(items.begin(), items.end(), items.begin(), [](auto m){ return m / 3 - 2; });
     cout << accumulate(items.begin(), items.end(), 0) << endl;
 }
