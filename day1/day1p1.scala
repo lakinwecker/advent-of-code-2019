@@ -1,10 +1,13 @@
 import scala.io.Source
 
+
 object Day1P1 extends App {
-  var total = 0;
-  val filename = args(0)
-  for (line <- Source.fromFile(filename).getLines){
-    total += (line.toInt) / 3 - 2
-  }
+  val fuel = (mass: Int) => mass / 3 - 2
+
+  val total =
+    ((Source.fromFile(args(0)).getLines)
+      .foldLeft
+        (0)
+        ((total, line) => total + fuel(line.toInt)))
   println(total)
 }
