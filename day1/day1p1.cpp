@@ -7,19 +7,13 @@
 
 using namespace std;
 
-int fuel(int mass) {
+int calcFuel(int mass) {
     return mass / 3 - 2;
 }
 
 int main() {
-    vector<string> lines;
-    copy(istream_iterator<string>(cin), istream_iterator<string>(), back_inserter(lines));
-    vector<int> masses(lines.size());
-    transform(lines.begin(), lines.end(), masses.begin(), [](auto l) {
-        istringstream out(l);
-        int i;
-        out >> i;
-        return fuel(i);
-    });
-    cout << accumulate(masses.begin(), masses.end(), 0) << endl;
+    vector<int> items;
+    copy(istream_iterator<int>(cin), istream_iterator<int>(), back_inserter(items));
+    transform(items.begin(), items.end(), items.begin(), calcFuel);
+    cout << accumulate(items.begin(), items.end(), 0) << endl;
 }
