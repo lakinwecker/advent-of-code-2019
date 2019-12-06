@@ -4,13 +4,17 @@ import scala.collection.immutable.Vector
 
 object Day2P1 extends App {
   def process(idx: Int, opcodes: Vector[Int]): Option[Int] = {
-    val getVals = (idx1:Int, idx2:Int) => opcodes.lift(idx1).zip(opcodes.lift(idx2))
+    def getVals(idx1:Int, idx2:Int) = opcodes.lift(idx1).zip(opcodes.lift(idx2))
+    def binaryOp(opcode:Int): Option[(Int, Int) => Int] = opcode match {
+      case 1 => Some(_ + _)
+      case 2 => Some(_ * _)
+      case _ => None
+    }
     opcodes.slice(idx, idx+4) match {
       case 99 +: rest => opcodes.lift(0)
-      case op +: lhsI +: rhsI +: target +: rest => 
-        (op, getVals(lhsI, rhsI)) match {
-          case (1, Some((lhs,rhs))) => process(idx+4, opcodes.updated(target, lhs + rhs))
-          case (2, Some((lhs,rhs))) => process(idx+4, opcodes.updated(target, lhs * rhs))
+      case opcode +: lhsI +: rhsI +: target +: rest => 
+        (binaryOp(opcode), getVals(lhsI, rhsI)) match {
+          case (Some(op), Some((lhs,rhs))) => process(idx+4, opcodes.updated(target, op(lhs, rhs)))
           case _ => None
         }
       case _ => None
