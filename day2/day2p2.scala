@@ -24,14 +24,15 @@ object Day2P2 extends App {
     case h :: t => for(xh <- h; xt <- cartesianProduct(t)) yield xh :: xt
   }
   // Recurse instead of double for loop. Ick.
-  def tryAll(noun: Int, verb: Int, opcodes: Vector[Int]): Option[List[Int]] =
-    cartesianProduct(List((0 to 100).toList, (0 to 100).toList)).find(
-      _ match {
+  def tryAll(noun: Int, verb: Int, opcodes: Vector[Int]): Option[List[Int]] = {
+    val range = (0 to 100).toList
+    cartesianProduct(List(range, range)).find(
+      {
         case (n +: v +: rest) => 
           process(0, opcodes.updated(1, n).updated(2, v)) == Some(19690720)
-        case _ => false
       }
     )
+  }
 
   val opcodes = Source
       .fromFile(args(0))
