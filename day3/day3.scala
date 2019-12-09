@@ -1,12 +1,13 @@
 import scala.io.Source
 
 object Day3 extends App {
+
   case class Point(x: Int, y: Int) {
     def +(that: Point) = Point(this.x + that.x, this.y + that.y)
     def l1norm() = Math.abs(this.x)+Math.abs(this.y)
   }
-  case class Range(min: Int, max: Int)
 
+  case class Range(min: Int, max: Int)
   def orderedRange(x1: Int, x2: Int) =
     Range(Math.min(x1, x2), Math.max(x1, x2))
 
@@ -28,7 +29,7 @@ object Day3 extends App {
       .zip(intersectRange(l1.yRange, l2.yRange))
       .map({ case (x, y) => Point(x, y) })
 
-  def inputPointFromString(s: String): Option[Point] =
+  def parsePoint(s: String): Option[Point] =
     (s.slice(0, 1), s.slice(1, s.length).toIntOption) match {
       case ("U", Some(d)) => Some(Point(0, d))
       case ("D", Some(d)) => Some(Point(0, -d))
@@ -38,7 +39,7 @@ object Day3 extends App {
     }
 
   def parsePath(p: List[String]): List[Line] =
-    p.flatMap(inputPointFromString)
+    p.flatMap(parsePoint)
       .scanLeft(Point(0, 0))(_+_)
       .sliding(2)
       .map({
